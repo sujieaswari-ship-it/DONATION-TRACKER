@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donation Tracker</title>
+    <style>
+        body {
+            font-family: bold, times new romen;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+            color: darkblue;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background: skyblue;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: darkblue;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .donation-list {
+            margin-top: 20px;
+        }
+
+        .donation-list table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .donation-list th, .donation-list td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .donation-list th {
+            background-color: #f8f8f8;
+        }
+
+        .summary {
+            margin-top: 20px;
+            padding: 15px;
+            background: #eef;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Donation Tracker</h1>
+
+        <form id="donationForm">
+            <div class="form-group">
+                <label for="donorName">Donor Name</label>
+                <input type="text" id="donorName" required />
+            </div>
+            <div class="form-group">
+                <label for="amount">Donation Amount</label>
+                <input type="number" id="amount" required />
+            </div>
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select id="category" required>
+                    <option value="Education">Education</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Environment">Environment</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <button type="button" onclick="addDonation()">Add Donation</button>
+        </form>
+
+        <div class="donation-list">
+            <h2>Donation List</h2>
+            <table id="donationTable">
+                <thead>
+                    <tr>
+                        <th>Donor Name</th>
+                        <th>Amount</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Donations will be added here dynamically -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="summary">
+            <h2>Donation Summary</h2>
+            <p id="totalDonations">Total Donations: $0</p>
+        </div>
+
+        <div class="factorial-calculator">
+            <h2>Factorial Calculator</h2>
+            <div class="form-group">
+                <label for="number">Enter a Number</label>
+                <input type="number" id="number" />
+            </div>
+            <button type="button" onclick="calculateFactorial()">Calculate Factorial</button>
+            <p id="factorialResult"></p>
+        </div>
+    </div>
+
+    <script>
+        let donations = [];
+
+        function addDonation() {
+            const name = document.getElementById('donorName').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            const category = document.getElementById('category').value;
+
+            if (name && amount && category) {
+                donations.push({ name, amount, category });
+                updateDonationTable();
+                updateSummary();
+
+                document.getElementById('donationForm').reset();
+            } else {
+                alert('Please fill all fields.');
+            }
+        }
+
+        function updateDonationTable() {
+            const tableBody = document.querySelector('#donationTable tbody');
+            tableBody.innerHTML = '';
+
+            donations.forEach(donation => {
+                const row = `<tr>
+                    <td>${donation.name}</td>
+                    <td>$${donation.amount.toFixed(2)}</td>
+                    <td>${donation.category}</td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        function updateSummary() {
+            const total = donations.reduce((sum, donation) => sum + donation.amount, 0);
+            document.getElementById('totalDonations').textContent = `Total Donations: $${total.toFixed(2)}`;
+        }
+
+        function calculateFactorial() {
+            const number = parseInt(document.getElementById('number').value);
+
+            if (isNaN(number) || number < 0) {
+                document.getElementById('factorialResult').textContent = 'Please enter a non-negative integer.';
+                return;
+            }
+
+            const factorial = (n) => (n === 0 || n === 1) ? 1 : n * factorial(n - 1);
+            const result = factorial(number);
+
+            document.getElementById('factorialResult').textContent = `Factorial of ${number} is ${result}.`;
+        }
+    </script>
+</body>
+</html>
